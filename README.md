@@ -19,9 +19,12 @@ terraform destroy --auto-approve
 ## Tools and addons use for the deployment
 
 Tools
--kubectl
--eksctl
--helm
+
+--kubectl
+
+--eksctl
+
+--helm
 
 Addons
 --Amazon EBS CSI driver
