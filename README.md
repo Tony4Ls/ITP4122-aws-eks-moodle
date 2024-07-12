@@ -47,7 +47,7 @@ Addons
 aws eks --region us-east-1 update-kubeconfig --name B07-eks-cluster
 ```
 
-Don't forget create a database for your moodle deploy
+Don't forget create a mysql database for your moodle deploy
 
 
 
