@@ -1,6 +1,6 @@
 # ITP4122-aws-eks-moodle
 
-## Use Terraform to build to basic infrastructure for deploy moodle
+## Use terraform to build to basic infrastructure for deploy moodle
 
 ```sh
 terraform init
