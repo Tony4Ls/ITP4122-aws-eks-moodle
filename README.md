@@ -20,22 +20,22 @@ terraform destroy --auto-approve
 
 Tools
 
---kubectl
+- kubectl
 
---eksctl
+- eksctl
 
---helm
+- helm
 
 
 Addons
 
---Amazon EBS CSI driver
+- Amazon EBS CSI driver
 
---AWS Load Balancer Controller
+- AWS Load Balancer Controller
 
---Metrics-server
+- Metrics-server
 
---Isito
+- Isito
 
 ## Update eks kubeconfig
 
