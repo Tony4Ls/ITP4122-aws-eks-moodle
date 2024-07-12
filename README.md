@@ -43,10 +43,6 @@ Addons
 aws eks --region us-east-1 update-kubeconfig --name B07-eks-cluster
 ```
 
-## Default Moodle Username and Password
-
-- Username: user
-- Password: bitnami
 
 
 
