@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: moodle-config
+data:
+  MOODLE_SITE_NAME: "B07 Moodle Site"
+  MOODLE_SITE_SHORTNAME: "B07Moodle"
+  MOODLE_SITE_LANG: "en"
+  MOODLE_ADMIN_EMAIL: "admin@example.com"
+  MOODLE_DEBUG: "0"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moodle
+  labels:
+    app: moodle
+spec:
+  selector:
+    matchLabels:
+      app: moodle
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: moodle
+      annotations:
+        sidecar.istio.io/inject: "true"
+    spec:
+      containers:
+      - name: moodle
+        image: bitnami/moodle:latest
+        ports:
+        - name: http
+          containerPort: 8080
+        - name: https
+          containerPort: 8443
+        envFrom:
+        - configMapRef:
+            name: moodle-config
+        env:
+        - name: ALLOW_EMPTY_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: moodle-db-secret
+              key: allow-empty-password
+        - name: MOODLE_DATABASE_TYPE
+          valueFrom:
+            secretKeyRef:
+              name: moodle-db-secret
+              key: database-type
+        - name: MOODLE_DATABASE_USER
+          valueFrom:
+            secretKeyRef:
+              name: moodle-db-secret
+              key: username
+        - name: MOODLE_DATABASE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: moodle-db-secret
+              key: password
+        - name: MOODLE_DATABASE_NAME
+          valueFrom:
+            secretKeyRef:
+              name: moodle-db-secret
+              key: database
+        - name: MOODLE_DATABASE_HOST
+          valueFrom:
+            secretKeyRef:
+              name: moodle-db-secret
+              key: database-host
+        resources:
+          requests:
+            cpu: "200m"   
+            memory: "512Mi"  
+          limits:
+            cpu: "500m"   
+            memory: "1Gi"  
+        volumeMounts:
+        - name: moodle-storage
+          mountPath: /bitnami/moodle
+      volumes:
+      - name: moodle-storage
+        persistentVolumeClaim:
+          claimName: moodle-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moodle
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+  - name: https
+    port: 8443
+    targetPort: 8443
+  selector:
+    app: moodle
+---
